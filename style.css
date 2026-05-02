@@ -1,63 +1,244 @@
+/* ===== RESET & BASE ===== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
-    background:#111;
-    color:white;
-    font-family:'Inter', sans-serif;
-    text-align:center;
+  background: #111;
+  color: #f0e8f5;
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
 }
 
-.screen { display:none; }
-.screen.active { display:block; }
-
-button {
-    padding:10px 20px;
-    cursor:pointer;
+#app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 440px;
+  min-height: 100vh;
 }
+
+.screen {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 36px 20px;
+}
+.screen.active { display: flex; }
+
+/* ===== VAULT ===== */
+.vault-card {
+  background: #1a1a1a;
+  border-radius: 20px;
+  padding: 36px 28px 28px;
+  width: 100%;
+  text-align: center;
+  border: 1px solid #2a2a2a;
+}
+.key-icon { font-size: 36px; margin-bottom: 16px; display: block; }
+.vault-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px; font-weight: 600;
+  color: #fff; margin-bottom: 6px;
+}
+.vault-sub { font-size: 13px; color: #666; margin-bottom: 28px; font-weight: 300; }
+
+.digit-row { display: flex; gap: 10px; justify-content: center; margin-bottom: 24px; }
+.dbox {
+  width: 54px; height: 60px;
+  background: #222; border: 1px solid #333;
+  border-radius: 10px; font-size: 22px; font-weight: 500;
+  color: #fff; text-align: center; outline: none;
+  transition: border-color 0.2s;
+  font-family: 'Inter', sans-serif;
+}
+.dbox:focus { border-color: #c8a84b; }
+
+.unlock-btn {
+  width: 100%; padding: 14px;
+  background: #fff; color: #111;
+  border: none; border-radius: 10px;
+  font-size: 14px; font-weight: 600;
+  letter-spacing: 0.1em; cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: opacity 0.2s;
+}
+.unlock-btn:hover { opacity: 0.88; }
+
+.clue-link {
+  font-size: 12px; color: #555; margin-top: 14px;
+  cursor: pointer; text-decoration: underline;
+}
+.clue-link:hover { color: #888; }
+.err-msg { font-size: 12px; color: #cc7766; margin-top: 10px; min-height: 16px; }
+
+/* ===== MEMORY GAME ===== */
+.mem-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px; font-weight: 600;
+  color: #fff; margin-bottom: 4px;
+}
+.mem-sub { font-size: 13px; color: #666; margin-bottom: 16px; }
+
+.match-dots { display: flex; gap: 8px; margin-bottom: 12px; }
+.mdot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #222; border: 1px solid #333;
+  transition: background 0.3s;
+}
+.mdot.done { background: #c8a84b; border-color: #c8a84b; }
 
 .card-grid {
-    display:grid;
-    grid-template-columns:repeat(4,70px);
-    gap:10px;
-    justify-content:center;
+  display: grid;
+  grid-template-columns: repeat(4, 72px);
+  gap: 10px; margin-bottom: 20px;
 }
-
 .card {
-    width:70px;
-    height:70px;
-    background:#222;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:24px;
-    cursor:pointer;
+  width: 72px; height: 72px; border-radius: 12px;
+  background: #1c1c1c; border: 1px solid #2a2a2a;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; cursor: pointer;
+  transition: transform 0.15s, border-color 0.2s;
+  user-select: none;
+}
+.card:hover:not(.flipped):not(.matched) { transform: scale(1.05); border-color: #444; }
+.card.flipped { background: #222; border-color: #555; }
+.card.matched {
+  background: #1a1a1a; border-color: #c8a84b;
+  animation: matchPop 0.4s ease;
+}
+@keyframes matchPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
 }
 
-.card.flipped { background:white; color:black; }
+/* ===== POPUP ===== */
+.popup-card {
+  background: #1a1a1a; border: 1px solid #2a2a2a;
+  border-radius: 20px; padding: 44px 32px;
+  text-align: center; width: 100%;
+}
+.popup-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px; color: #fff; margin-bottom: 8px;
+}
+.popup-msg {
+  font-size: 14px; color: #666; font-style: italic;
+  margin-bottom: 28px;
+  font-family: 'Playfair Display', serif;
+}
+.cont-btn {
+  padding: 12px 36px; border-radius: 50px;
+  border: 1px solid #333; background: transparent;
+  color: #ccc; font-size: 13px;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.08em; cursor: pointer;
+  transition: background 0.2s;
+}
+.cont-btn:hover { background: #222; }
+
+/* ===== HIDDEN WORDS ===== */
+.hw-top { text-align: center; margin-bottom: 14px; width: 100%; }
+.hw-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px; font-weight: 600;
+  color: #fff; margin-bottom: 8px;
+}
+.found-badge {
+  display: inline-block; padding: 4px 18px;
+  border: 1px solid #2a2a2a; border-radius: 50px;
+  font-size: 12px; color: #666; letter-spacing: 0.04em;
+}
+.found-badge span { color: #fff; font-weight: 500; }
+
+.para-box {
+  background: #1a1a1a; border-radius: 14px;
+  border: 1px solid #252525; padding: 20px 18px;
+  margin-bottom: 14px; width: 100%;
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-size: 13.5px;
+  line-height: 2; color: #aaa;
+}
+.para-box b { color: #fff; font-style: normal; font-weight: 700; }
 
 .word-grid {
-    display:grid;
-    grid-template-columns:repeat(10,30px);
-    gap:3px;
-    justify-content:center;
+  display: grid;
+  grid-template-columns: repeat(10, 32px);
+  gap: 3px; user-select: none; margin-bottom: 8px;
 }
-
 .wcell {
-    width:30px;
-    height:30px;
-    background:#222;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+  width: 32px; height: 32px; background: #161616;
+  border-radius: 6px; display: flex;
+  align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 500; color: #555;
+  cursor: pointer; border: 1px solid transparent;
+  transition: background 0.1s, color 0.1s;
 }
+.wcell.sel { background: #2a2010; color: #fff; border-color: #7a6030; }
+.wcell.found { background: #221a00; color: #c8a84b; border-color: #c8a84b55; }
+.swipe-hint { font-size: 11px; color: #444; text-align: center; }
 
-.wcell.sel { background:orange; }
-.wcell.found { background:lime; }
+/* ===== LETTER ===== */
+.env-icon {
+  font-size: 48px; cursor: pointer;
+  margin-bottom: 14px; display: inline-block;
+  transition: transform 0.2s;
+}
+.env-icon:hover { transform: scale(1.08); }
+.open-hint { font-size: 13px; color: #555; margin-bottom: 22px; }
 
 .letter-card {
-    display:none;
-    background:#222;
-    padding:20px;
+  background: #1a1a1a; border: 1px solid #2a2a2a;
+  border-radius: 16px; padding: 28px 24px;
+  width: 100%; opacity: 0; transform: translateY(16px);
+  transition: opacity 0.6s, transform 0.6s;
+  display: none;
+}
+.letter-card.show { opacity: 1; transform: translateY(0); display: block; }
+
+.monthversary-badge {
+  display: inline-block; margin-bottom: 18px;
+  padding: 6px 20px; border-radius: 50px;
+  border: 1px solid #c8a84b55; font-size: 11px;
+  letter-spacing: 0.12em; color: #c8a84b;
+  font-family: 'Inter', sans-serif; font-weight: 500;
+}
+.letter-sal {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-size: 17px;
+  color: #c8a84b; margin-bottom: 14px;
+}
+.letter-body {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-size: 14px;
+  line-height: 2.2; color: #aaa;
+}
+.letter-body em { font-style: italic; color: #ccc; }
+.letter-divider { border: none; border-top: 1px solid #2a2a2a; margin: 18px 0; }
+.letter-sign {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-size: 13px;
+  color: #666; text-align: right;
 }
 
-.letter-card.show {
-    display:block;
+/* ===== ANIMASI ===== */
+.confetti-dot {
+  position: fixed; width: 5px; height: 5px;
+  border-radius: 50%; pointer-events: none;
+  animation: fall 1.8s ease-in forwards;
+}
+@keyframes fall {
+  0% { opacity: 1; transform: translateY(0) rotate(0deg); }
+  100% { opacity: 0; transform: translateY(350px) rotate(720deg); }
+}
+.heart-float {
+  position: fixed; pointer-events: none;
+  font-size: 18px; animation: floatUp 2s ease-out forwards;
+}
+@keyframes floatUp {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-200px) scale(0.5); }
 }

@@ -1,39 +1,35 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy Monthiversary</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Monthiversary 🤍</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <div id="app">
 
-  <!-- VAULT -->
+  <!-- 1. VAULT -->
   <div id="s-vault" class="screen active">
     <div class="vault-card">
       <span class="key-icon">🔑</span>
       <div class="vault-title">Our Secret</div>
       <div class="vault-sub">Enter the digits to unlock the vault</div>
-
       <div class="digit-row">
-        <input class="dbox" id="d0" maxlength="1">
-        <input class="dbox" id="d1" maxlength="1">
-        <input class="dbox" id="d2" maxlength="1">
-        <input class="dbox" id="d3" maxlength="1">
+        <input class="dbox" id="d0" maxlength="1" type="password" inputmode="numeric">
+        <input class="dbox" id="d1" maxlength="1" type="password" inputmode="numeric">
+        <input class="dbox" id="d2" maxlength="1" type="password" inputmode="numeric">
+        <input class="dbox" id="d3" maxlength="1" type="password" inputmode="numeric">
       </div>
-
       <button class="unlock-btn" onclick="checkCode()">UNLOCK</button>
       <div class="clue-link" onclick="showClue()">Need a clue?</div>
       <div class="err-msg" id="vaultMsg"></div>
     </div>
   </div>
 
-  <!-- MEMORY -->
+  <!-- 2. MEMORY GAME -->
   <div id="s-memory" class="screen">
     <div class="mem-title">Fragments of Us</div>
     <div class="mem-sub" id="memSub">Matches: 0 / 8</div>
@@ -41,28 +37,70 @@
     <div class="card-grid" id="cardGrid"></div>
   </div>
 
-  <!-- POPUP -->
+  <!-- 3. POPUP -->
   <div id="s-popup" class="screen">
     <div class="popup-card">
       <div class="popup-title">You won ✨</div>
-      <div class="popup-msg">i figured you would...</div>
+      <div class="popup-msg">i figured you would, Odi...</div>
       <button class="cont-btn" onclick="startWords()">CONTINUE</button>
     </div>
   </div>
 
-  <!-- HIDDEN WORDS -->
+  <!-- 4. HIDDEN WORDS -->
   <div id="s-words" class="screen">
-    <div class="hw-title">Hidden Words</div>
-    <div class="found-badge">Found: <span id="foundCount">0</span> / 6</div>
+    <div class="hw-top">
+      <div class="hw-title">Hidden Words</div>
+      <div class="found-badge">Found: <span id="foundCount">0</span> / 6</div>
+    </div>
+    <div class="para-box">
+      I don't need to say too much, but if you really pay attention, you'll notice it. The way <b>YOU</b> carry yourself, the way things just seem to fall into place when you're comfortable. And maybe it's a small thing, maybe it's nothing you've thought about before, but I think you <b>LOOK</b> a little different, a little <b>BETTER</b> when things feel right. Especially <b>WITH</b> the right person around. Maybe it's just timing, or maybe it's something else. But I know I'd rather have <b>ME</b> right <b>HERE</b>.
+    </div>
     <div class="word-grid" id="wordGrid"></div>
+    <div class="swipe-hint">(Swipe across the letters to find the words)</div>
   </div>
 
-  <!-- LETTER -->
+  <!-- 5. LETTER -->
   <div id="s-letter" class="screen">
-    <span class="env-icon" onclick="openLetter()">💌</span>
+    <span class="env-icon" id="envIcon" onclick="openLetter()">💌</span>
+    <div class="open-hint" id="openHint">tap to open, Odi</div>
     <div class="letter-card" id="letterCard">
-      <h3>Hi...</h3>
-      <p>Thanks for everything ❤️</p>
+      <div class="monthversary-badge">3 Maret — 3 Mei</div>
+      <div class="letter-sal">Buat Odi, yang paling aku sayang,</div>
+      <div class="letter-body">
+        Terima kasih ya masih sama aku disini,<br>
+        walaupun kisah kita masih bisa dibilang singkat,<br>
+        tapi semoga kita tetap bersama dengan waktu yang lama ya.<br><br>
+
+        Terima kasih ya kamu selalu mengusahakan aku,<br>
+        selalu melakukan yang terbaik buat aku,<br>
+        dan aku sangat sangat merasa beruntung punya kamu di hidup aku.<br><br>
+
+        Aku minta maaf ya,<br>
+        mungkin aku masih banyak kurangnya di hubungan ini,<br>
+        tapi aku selalu mencoba jadi yang terbaik buat kamu sayang.<br><br>
+
+        Tetap jadi diri kamu yaa,<br>
+        aku selalu sayang sama kamu,<br>
+        aku selalu cinta sama kamu,<br>
+        dengan segala kelebihan dan kekurangan kamu.<br><br>
+
+        Dimata aku kamu selalu indah,<br>
+        kamu selalu cantik, selalu lucu, selalu imut, selalu manis, dan selalu menggemaskan.<br>
+        Kamu selalu mengambil segala perhatian aku,<br>
+        kamu selalu buat aku jatuh cinta lagi setiap detiknya.<br>
+        Kamu kesayanganku, kamu duniaku, kamu semestaku, kamu segalanya bagi aku.<br><br>
+
+        Aku harap kita bisa melewati segala hal yang ada di hubungan kita,<br>
+        aku akan selalu melakukan yang terbaik buat hubungan kita.<br>
+        Tetap disini sama aku ya sayang? tetap jadi pasangan aku,<br>
+        aku mau kamu selamanya.<br><br>
+
+        I love u, I still love u, I always love u,<br>
+        I love everything about u, I love u more than u know,<br>
+        I love u to the moon and back.
+      </div>
+      <hr class="letter-divider">
+      <div class="letter-sign">Selamat tanggal 3 yang kedua, Odi. — dari kekasihmu, Ebie 🌹</div>
     </div>
   </div>
 
