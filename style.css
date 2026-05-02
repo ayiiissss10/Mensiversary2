@@ -1,0 +1,63 @@
+body {
+    background:#111;
+    color:white;
+    font-family:'Inter', sans-serif;
+    text-align:center;
+}
+
+.screen { display:none; }
+.screen.active { display:block; }
+
+button {
+    padding:10px 20px;
+    cursor:pointer;
+}
+
+.card-grid {
+    display:grid;
+    grid-template-columns:repeat(4,70px);
+    gap:10px;
+    justify-content:center;
+}
+
+.card {
+    width:70px;
+    height:70px;
+    background:#222;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:24px;
+    cursor:pointer;
+}
+
+.card.flipped { background:white; color:black; }
+
+.word-grid {
+    display:grid;
+    grid-template-columns:repeat(10,30px);
+    gap:3px;
+    justify-content:center;
+}
+
+.wcell {
+    width:30px;
+    height:30px;
+    background:#222;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.wcell.sel { background:orange; }
+.wcell.found { background:lime; }
+
+.letter-card {
+    display:none;
+    background:#222;
+    padding:20px;
+}
+
+.letter-card.show {
+    display:block;
+}

@@ -4,567 +4,70 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Happy Monthiversary</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    background: #111;
-    color: #f0e8f5;
-    font-family: 'Inter', sans-serif;
-    display: flex;
-    justify-content: center;
-    min-height: 100vh;
-  }
-
-  #app {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    max-width: 440px;
-    min-height: 100vh;
-  }
-
-  .screen {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    padding: 36px 20px;
-  }
-  .screen.active { display: flex; }
-
-  /* ===== VAULT ===== */
-  .vault-card {
-    background: #1a1a1a;
-    border-radius: 20px;
-    padding: 36px 28px 28px;
-    width: 100%;
-    text-align: center;
-    border: 1px solid #2a2a2a;
-  }
-  .key-icon { font-size: 36px; margin-bottom: 16px; display: block; }
-  .vault-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 28px; font-weight: 600;
-    color: #fff; margin-bottom: 6px;
-  }
-  .vault-sub { font-size: 13px; color: #666; margin-bottom: 28px; font-weight: 300; }
-
-  .digit-row { display: flex; gap: 10px; justify-content: center; margin-bottom: 24px; }
-  .dbox {
-    width: 54px; height: 60px;
-    background: #222; border: 1px solid #333;
-    border-radius: 10px; font-size: 22px; font-weight: 500;
-    color: #fff; text-align: center; outline: none;
-    transition: border-color 0.2s;
-    font-family: 'Inter', sans-serif;
-  }
-  .dbox:focus { border-color: #c8a84b; }
-
-  .unlock-btn {
-    width: 100%; padding: 14px;
-    background: #fff; color: #111;
-    border: none; border-radius: 10px;
-    font-size: 14px; font-weight: 600;
-    letter-spacing: 0.1em; cursor: pointer;
-    font-family: 'Inter', sans-serif;
-    transition: opacity 0.2s;
-  }
-  .unlock-btn:hover { opacity: 0.88; }
-
-  .clue-link {
-    font-size: 12px; color: #555; margin-top: 14px;
-    cursor: pointer; text-decoration: underline;
-  }
-  .clue-link:hover { color: #888; }
-  .err-msg { font-size: 12px; color: #cc7766; margin-top: 10px; min-height: 16px; }
-
-  /* ===== MEMORY GAME ===== */
-  .mem-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 24px; font-weight: 600;
-    color: #fff; margin-bottom: 4px;
-  }
-  .mem-sub { font-size: 13px; color: #666; margin-bottom: 16px; }
-
-  .match-dots { display: flex; gap: 8px; margin-bottom: 12px; }
-  .mdot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: #222; border: 1px solid #333;
-    transition: background 0.3s;
-  }
-  .mdot.done { background: #c8a84b; border-color: #c8a84b; }
-
-  .card-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 72px);
-    gap: 10px; margin-bottom: 20px;
-  }
-  .card {
-    width: 72px; height: 72px; border-radius: 12px;
-    background: #1c1c1c; border: 1px solid #2a2a2a;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 26px; cursor: pointer;
-    transition: transform 0.15s, border-color 0.2s;
-    user-select: none;
-  }
-  .card:hover:not(.flipped):not(.matched) { transform: scale(1.05); border-color: #444; }
-  .card.flipped { background: #222; border-color: #555; }
-  .card.matched {
-    background: #1a1a1a; border-color: #c8a84b;
-    animation: matchPop 0.4s ease;
-  }
-  @keyframes matchPop {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.08); }
-    100% { transform: scale(1); }
-  }
-
-  /* ===== POPUP ===== */
-  .popup-card {
-    background: #1a1a1a; border: 1px solid #2a2a2a;
-    border-radius: 20px; padding: 44px 32px;
-    text-align: center; width: 100%;
-  }
-  .popup-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 28px; color: #fff; margin-bottom: 8px;
-  }
-  .popup-msg {
-    font-size: 14px; color: #666; font-style: italic;
-    margin-bottom: 28px;
-    font-family: 'Playfair Display', serif;
-  }
-  .cont-btn {
-    padding: 12px 36px; border-radius: 50px;
-    border: 1px solid #333; background: transparent;
-    color: #ccc; font-size: 13px;
-    font-family: 'Inter', sans-serif;
-    letter-spacing: 0.08em; cursor: pointer;
-    transition: background 0.2s;
-  }
-  .cont-btn:hover { background: #222; }
-
-  /* ===== HIDDEN WORDS ===== */
-  .hw-top { text-align: center; margin-bottom: 14px; width: 100%; }
-  .hw-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 22px; font-weight: 600;
-    color: #fff; margin-bottom: 8px;
-  }
-  .found-badge {
-    display: inline-block; padding: 4px 18px;
-    border: 1px solid #2a2a2a; border-radius: 50px;
-    font-size: 12px; color: #666; letter-spacing: 0.04em;
-  }
-  .found-badge span { color: #fff; font-weight: 500; }
-
-  .para-box {
-    background: #1a1a1a; border-radius: 14px;
-    border: 1px solid #252525; padding: 20px 18px;
-    margin-bottom: 14px; width: 100%;
-    font-family: 'Playfair Display', serif;
-    font-style: italic; font-size: 13.5px;
-    line-height: 2; color: #aaa;
-  }
-  .para-box b { color: #fff; font-style: normal; font-weight: 700; }
-
-  .word-grid {
-    display: grid;
-    grid-template-columns: repeat(10, 32px);
-    gap: 3px; user-select: none; margin-bottom: 8px;
-  }
-  .wcell {
-    width: 32px; height: 32px; background: #161616;
-    border-radius: 6px; display: flex;
-    align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 500; color: #555;
-    cursor: pointer; border: 1px solid transparent;
-    transition: background 0.1s, color 0.1s;
-  }
-  .wcell.sel { background: #2a2010; color: #fff; border-color: #7a6030; }
-  .wcell.found { background: #221a00; color: #c8a84b; border-color: #c8a84b55; }
-  .swipe-hint { font-size: 11px; color: #444; text-align: center; }
-
-  /* ===== LETTER ===== */
-  .env-icon {
-    font-size: 48px; cursor: pointer;
-    margin-bottom: 14px; display: inline-block;
-    transition: transform 0.2s;
-  }
-  .env-icon:hover { transform: scale(1.08); }
-  .open-hint { font-size: 13px; color: #555; margin-bottom: 22px; }
-
-  .letter-card {
-    background: #1a1a1a; border: 1px solid #2a2a2a;
-    border-radius: 16px; padding: 28px 24px;
-    width: 100%; opacity: 0; transform: translateY(16px);
-    transition: opacity 0.6s, transform 0.6s;
-    display: none;
-  }
-  .letter-card.show { opacity: 1; transform: translateY(0); display: block; }
-
-  .monthversary-badge {
-    display: inline-block; margin-bottom: 18px;
-    padding: 6px 20px; border-radius: 50px;
-    border: 1px solid #c8a84b55; font-size: 11px;
-    letter-spacing: 0.12em; color: #c8a84b;
-    font-family: 'Inter', sans-serif; font-weight: 500;
-  }
-  .letter-sal {
-    font-family: 'Playfair Display', serif;
-    font-style: italic; font-size: 17px;
-    color: #c8a84b; margin-bottom: 14px;
-  }
-  .letter-body {
-    font-family: 'Playfair Display', serif;
-    font-style: italic; font-size: 14px;
-    line-height: 2.2; color: #aaa;
-  }
-  .letter-body em { font-style: italic; color: #ccc; }
-  .letter-divider { border: none; border-top: 1px solid #2a2a2a; margin: 18px 0; }
-  .letter-sign {
-    font-family: 'Playfair Display', serif;
-    font-style: italic; font-size: 13px;
-    color: #666; text-align: right;
-  }
-
-  /* ===== ANIMASI ===== */
-  .confetti-dot {
-    position: fixed; width: 5px; height: 5px;
-    border-radius: 50%; pointer-events: none;
-    animation: fall 1.8s ease-in forwards;
-  }
-  @keyframes fall {
-    0% { opacity: 1; transform: translateY(0) rotate(0deg); }
-    100% { opacity: 0; transform: translateY(350px) rotate(720deg); }
-  }
-  .heart-float {
-    position: fixed; pointer-events: none;
-    font-size: 18px; animation: floatUp 2s ease-out forwards;
-  }
-  @keyframes floatUp {
-    0% { opacity: 1; transform: translateY(0) scale(1); }
-    100% { opacity: 0; transform: translateY(-200px) scale(0.5); }
-  }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <div id="app">
 
-  <!-- 1. VAULT -->
+  <!-- VAULT -->
   <div id="s-vault" class="screen active">
     <div class="vault-card">
       <span class="key-icon">🔑</span>
       <div class="vault-title">Our Secret</div>
       <div class="vault-sub">Enter the digits to unlock the vault</div>
+
       <div class="digit-row">
-        <input class="dbox" id="d0" maxlength="1" type="password" inputmode="numeric">
-        <input class="dbox" id="d1" maxlength="1" type="password" inputmode="numeric">
-        <input class="dbox" id="d2" maxlength="1" type="password" inputmode="numeric">
-        <input class="dbox" id="d3" maxlength="1" type="password" inputmode="numeric">
+        <input class="dbox" id="d0" maxlength="1">
+        <input class="dbox" id="d1" maxlength="1">
+        <input class="dbox" id="d2" maxlength="1">
+        <input class="dbox" id="d3" maxlength="1">
       </div>
+
       <button class="unlock-btn" onclick="checkCode()">UNLOCK</button>
       <div class="clue-link" onclick="showClue()">Need a clue?</div>
       <div class="err-msg" id="vaultMsg"></div>
     </div>
   </div>
 
-  <!-- 2. MEMORY GAME -->
+  <!-- MEMORY -->
   <div id="s-memory" class="screen">
-    <div class="mem-title"></div>
+    <div class="mem-title">Fragments of Us</div>
     <div class="mem-sub" id="memSub">Matches: 0 / 8</div>
     <div class="match-dots" id="matchDots"></div>
     <div class="card-grid" id="cardGrid"></div>
   </div>
 
-  <!-- 3. POPUP -->
+  <!-- POPUP -->
   <div id="s-popup" class="screen">
     <div class="popup-card">
       <div class="popup-title">You won ✨</div>
-      <div class="popup-msg">i figured you would, Odi...</div>
+      <div class="popup-msg">i figured you would...</div>
       <button class="cont-btn" onclick="startWords()">CONTINUE</button>
     </div>
   </div>
 
-  <!-- 4. HIDDEN WORDS -->
+  <!-- HIDDEN WORDS -->
   <div id="s-words" class="screen">
-    <div class="hw-top">
-      <div class="hw-title">Hidden Words</div>
-      <div class="found-badge">Found: <span id="foundCount">0</span> / 6</div>
-    </div>
-    <div class="para-box">
-      I don't need to say too much, but if you really pay attention, you'll notice it. The way <b>YOU</b> carry yourself, the way things just seem to fall into place when you're comfortable. And maybe it's a small thing, maybe it's nothing you've thought about before, but I think you <b>LOOK</b> a little different, a little <b>BETTER</b> when things feel right. Especially <b>WITH</b> the right person around. Maybe it's just timing, or maybe it's something else. But I know I'd rather have <b>ME</b> right <b>HERE</b>.
-    </div>
+    <div class="hw-title">Hidden Words</div>
+    <div class="found-badge">Found: <span id="foundCount">0</span> / 6</div>
     <div class="word-grid" id="wordGrid"></div>
-    <div class="swipe-hint">(Swipe across the letters to find the words)</div>
   </div>
 
-  <!-- 5. LETTER -->
+  <!-- LETTER -->
   <div id="s-letter" class="screen">
-    <span class="env-icon" id="envIcon" onclick="openLetter()">💌</span>
-    <div class="open-hint" id="openHint">tap to open, Odi</div>
+    <span class="env-icon" onclick="openLetter()">💌</span>
     <div class="letter-card" id="letterCard">
-      <div class="monthversary-badge">3 Maret - 3 Mei</div>
-      <div class="letter-sal">Buat Odi, yang paling aku sayang,</div>
-      <div class="letter-body">
-        Terima kasih ya masih sama aku disini, <br>
-        walaupun kisah kita masih bisa dibilang singkat, <br>
-        tapi semoga kita tetap bersama dengan waktu yang lama ya<br><br>
-
-        2 bulan. Kedengarannya singkat,<br>
-        tapi rasanya udah cukup lama buat aku tau<br>
-        bahwa kamu itu <em>annoying</em> dengan cara yang bikin aku senyum.<br><br>
-
-        Kamu tuh aneh, Odi. Tapi anehnya kamu<br>
-        pas banget sama anehnya aku —<br>
-        dan somehow that makes everything feel right.<br><br>
-
-        Aku suka waktu kamu cerita hal-hal kecil<br>
-        seolah itu paling penting di dunia.<br>
-        Buat aku, memang penting. Karena kamu yang cerita.<br><br>
-
-        So here's the thing —<br>
-        aku nggak minta banyak.<br>
-        Cukup tetap di sini, tetap jadi kamu,<br>
-        dan biarkan aku jadi orang yang paling banyak tau<br>
-        betapa luar biasanya kamu. 🤍
-      </div>
-      <hr class="letter-divider">
-      <div class="letter-sign">happy 2nd monthversary, Odi. — selalu, aku 🌹</div>
+      <h3>Hi...</h3>
+      <p>Thanks for everything ❤️</p>
     </div>
   </div>
 
 </div>
 
-<script>
-  const KODE_VAULT = "0303";
-  const KATA_TERSEMBUNYI = ["YOU", "LOOK", "BETTER", "WITH", "ME", "HERE"];
-
-  function show(id) {
-    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-    document.getElementById(id).classList.add("active");
-  }
-
-  /* VAULT */
-  const digits = [0, 1, 2, 3].map(i => document.getElementById("d" + i));
-  digits.forEach((d, i) => {
-    d.addEventListener("input", () => {
-      d.value = d.value.replace(/\D/g, "").slice(-1);
-      if (d.value && i < 3) digits[i + 1].focus();
-    });
-    d.addEventListener("keydown", e => {
-      if (e.key === "Backspace" && !d.value && i > 0) digits[i - 1].focus();
-      if (e.key === "Enter") checkCode();
-    });
-  });
-
-  function checkCode() {
-    const code = digits.map(d => d.value).join("");
-    if (code === KODE_VAULT) {
-      show("s-memory");
-      initMemory();
-    } else {
-      const msg = document.getElementById("vaultMsg");
-      msg.textContent = "Hmm, coba ingat lagi ya 💛";
-      digits.forEach(d => { d.style.borderColor = "#cc7766"; d.value = ""; });
-      digits[0].focus();
-      setTimeout(() => {
-        msg.textContent = "";
-        digits.forEach(d => d.style.borderColor = "");
-      }, 2000);
-    }
-  }
-
-  function showClue() {
-    document.getElementById("vaultMsg").textContent = "Clue: 🗓️";
-  }
-
-  /* MEMORY GAME */
-  const SIMBOL = ["🦐", "🫰", "🫶", "❤️", "🧸", "🤍", "🌹", "💌"];
-  let first = null, second = null, locked = false, matches = 0;
-
-  function initMemory() {
-    const grid = document.getElementById("cardGrid");
-    const dots = document.getElementById("matchDots");
-    grid.innerHTML = ""; dots.innerHTML = "";
-    first = null; second = null; locked = false; matches = 0;
-    document.getElementById("memSub").textContent = "Matches: 0 / 8";
-
-    for (let i = 0; i < 8; i++) {
-      const d = document.createElement("div");
-      d.className = "mdot"; d.id = "dot" + i;
-      dots.appendChild(d);
-    }
-
-    [...SIMBOL, ...SIMBOL]
-      .sort(() => Math.random() - 0.5)
-      .forEach(sym => {
-        const c = document.createElement("div");
-        c.className = "card"; c.dataset.sym = sym;
-        c.onclick = () => flipCard(c, sym);
-        grid.appendChild(c);
-      });
-  }
-
-  function flipCard(card, sym) {
-    if (locked || card.classList.contains("flipped") || card.classList.contains("matched")) return;
-    card.classList.add("flipped"); card.textContent = sym;
-    if (!first) { first = card; return; }
-    second = card; locked = true;
-    if (first.dataset.sym === second.dataset.sym) {
-      first.classList.add("matched"); second.classList.add("matched");
-      document.getElementById("dot" + matches).classList.add("done");
-      matches++;
-      document.getElementById("memSub").textContent = "Matches: " + matches + " / 8";
-      first = null; second = null; locked = false;
-      if (matches === 8) setTimeout(() => show("s-popup"), 600);
-    } else {
-      const a = first, b = second;
-      setTimeout(() => {
-        a.classList.remove("flipped"); b.classList.remove("flipped");
-        a.textContent = ""; b.textContent = "";
-        first = null; second = null; locked = false;
-      }, 900);
-    }
-  }
-
-  /* HIDDEN WORDS */
-  let foundWords = new Set(), selecting = false, selectedCells = [];
-
-  function startWords() {
-    show("s-words");
-    foundWords = new Set();
-    document.getElementById("foundCount").textContent = "0";
-    buildGrid();
-  }
-
-  function buildGrid() {
-    const gridData = Array(10).fill(null).map(() => Array(10).fill(""));
-    const alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-    KATA_TERSEMBUNYI.forEach(word => {
-      let placed = false, tries = 0;
-      while (!placed && tries < 500) {
-        tries++;
-        const horiz = Math.random() < 0.5;
-        const r = Math.floor(Math.random() * 10);
-        const c = Math.floor(Math.random() * 10);
-        const dr = horiz ? 0 : 1, dc = horiz ? 1 : 0;
-        if (r + dr * (word.length - 1) > 9 || c + dc * (word.length - 1) > 9) continue;
-        let ok = true;
-        for (let i = 0; i < word.length; i++) {
-          if (gridData[r + dr * i][c + dc * i] !== "" && gridData[r + dr * i][c + dc * i] !== word[i]) { ok = false; break; }
-        }
-        if (ok) {
-          for (let i = 0; i < word.length; i++) gridData[r + dr * i][c + dc * i] = word[i];
-          placed = true;
-        }
-      }
-    });
-
-    for (let r = 0; r < 10; r++)
-      for (let c = 0; c < 10; c++)
-        if (!gridData[r][c]) gridData[r][c] = alpha[Math.floor(Math.random() * 26)];
-
-    const grid = document.getElementById("wordGrid");
-    grid.innerHTML = "";
-    for (let r = 0; r < 10; r++) {
-      for (let c = 0; c < 10; c++) {
-        const cell = document.createElement("div");
-        cell.className = "wcell";
-        cell.textContent = gridData[r][c];
-        cell.dataset.r = r; cell.dataset.c = c;
-        cell.addEventListener("mousedown", e => { e.preventDefault(); startSel(cell); });
-        cell.addEventListener("mouseover", () => { if (selecting) extSel(cell); });
-        cell.addEventListener("touchstart", e => { e.preventDefault(); startSel(cell); }, { passive: false });
-        cell.addEventListener("touchmove", e => {
-          e.preventDefault();
-          const el = document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY);
-          if (el && el.classList.contains("wcell")) extSel(el);
-        }, { passive: false });
-        grid.appendChild(cell);
-      }
-    }
-    document.addEventListener("mouseup", endSel);
-    document.addEventListener("touchend", endSel);
-  }
-
-  function startSel(cell) { selecting = true; selectedCells = []; addCell(cell); }
-  function extSel(cell) { if (!selecting || selectedCells.includes(cell)) return; addCell(cell); }
-  function addCell(cell) { cell.classList.add("sel"); selectedCells.push(cell); }
-
-  function endSel() {
-    if (!selecting) return;
-    selecting = false;
-    const word = selectedCells.map(c => c.textContent).join("");
-    const wordRev = word.split("").reverse().join("");
-    const match = KATA_TERSEMBUNYI.find(w => (w === word || w === wordRev) && !foundWords.has(w));
-    if (match) {
-      selectedCells.forEach(c => { c.classList.remove("sel"); c.classList.add("found"); });
-      foundWords.add(match);
-      document.getElementById("foundCount").textContent = foundWords.size;
-      spawnConfetti();
-      if (foundWords.size === KATA_TERSEMBUNYI.length) setTimeout(() => burstHearts(), 400);
-    } else {
-      selectedCells.forEach(c => c.classList.remove("sel"));
-    }
-    selectedCells = [];
-  }
-
-  /* ANIMASI */
-  function spawnConfetti() {
-    const colors = ["#c8a84b", "#ffffff", "#888", "#444"];
-    for (let i = 0; i < 10; i++) {
-      const d = document.createElement("div");
-      d.className = "confetti-dot";
-      d.style.left = Math.random() * 100 + "vw";
-      d.style.top = "50%";
-      d.style.background = colors[Math.floor(Math.random() * colors.length)];
-      d.style.animationDelay = Math.random() * 0.4 + "s";
-      document.body.appendChild(d);
-      setTimeout(() => d.remove(), 2200);
-    }
-  }
-
-  function burstHearts() {
-    const emojis = ["🤍", "✨", "🌹"];
-    for (let i = 0; i < 14; i++) {
-      const h = document.createElement("div");
-      h.className = "heart-float";
-      h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-      h.style.left = Math.random() * 90 + "vw";
-      h.style.top = Math.random() * 60 + 20 + "vh";
-      h.style.animationDelay = Math.random() * 0.6 + "s";
-      document.body.appendChild(h);
-      setTimeout(() => h.remove(), 2500);
-    }
-    setTimeout(() => show("s-letter"), 1200);
-  }
-
-  /* SURAT */
-  function openLetter() {
-    document.getElementById("envIcon").style.display = "none";
-    document.getElementById("openHint").style.display = "none";
-    const card = document.getElementById("letterCard");
-    card.style.display = "block";
-    requestAnimationFrame(() => requestAnimationFrame(() => card.classList.add("show")));
-    const emojis = ["🤍", "✨", "🌹"];
-    for (let i = 0; i < 10; i++) {
-      const h = document.createElement("div");
-      h.className = "heart-float";
-      h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-      h.style.left = Math.random() * 90 + "vw";
-      h.style.top = Math.random() * 50 + 20 + "vh";
-      h.style.animationDelay = Math.random() * 0.8 + "s";
-      document.body.appendChild(h);
-      setTimeout(() => h.remove(), 2500);
-    }
-  }
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
